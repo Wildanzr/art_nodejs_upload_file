@@ -1,0 +1,27 @@
+{
+  "name": "nodejs_upload_file",
+  "version": "1.0.0",
+  "description": "Upload and manage file using multer",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wildanzr/art_nodejs_upload_file.git"
+  },
+  "keywords": [
+    "multer",
+    "nodejs"
+  ],
+  "author": "Graita Sukma Febriansyah Triwildan Azmi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wildanzr/art_nodejs_upload_file/issues"
+  },
+  "homepage": "https://github.com/Wildanzr/art_nodejs_upload_file#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
