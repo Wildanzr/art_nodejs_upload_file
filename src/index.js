@@ -35,13 +35,66 @@ const deleteFile = (file) => {
   });
 };
 
+const acceptedFileTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/svg+xml",
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+];
+
+const validateFileTypes = (file) => {
+  if (!acceptedFileTypes.includes(file.mimetype)) {
+    return false;
+  }
+  return true;
+};
+
 // Membuat aplikasi express
 const PORT = 5000; // Best practice gunakan environment variable
+const HOST = "http://localhost"; // Best practice gunakan environment variable
 const app = express();
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.post("/uploads", upload.single("file"), (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({
+      message: "File tidak ditemukan",
+    });
+  } else if (!validateFileTypes(file)) {
+    deleteFile(file);
+    return res.status(400).json({
+      message: "Format file tidak didukung",
+    });
+  }
+
+  return res.status(200).json({
+    message: "File berhasil diunggah",
+    data: {
+      url: `${HOST}:${PORT}/uploads/${file.filename}`,
+    },
+  });
+});
+
+app.get("/uploads/:filename", (req, res) => {
+  const file = req.params.filename;
+  const filePath = path.join(__dirname, "uploads", file);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({
+      message: "File tidak ditemukan",
+    });
+  }
+
+  return res.sendFile(filePath);
 });
 
 app.listen(PORT, () => {
